@@ -1,0 +1,6 @@
+{
+  "name": "SAIM CLOTHES",
+  "description": "SAIM CLOTHES — Premium 3D Men's Fashion Store offering tailored shirts, trousers, denim jeans, hoodies, jackets, and traditional wear across Pakistan in PKR.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

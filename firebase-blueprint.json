@@ -1,0 +1,235 @@
+{
+  "entities": {
+    "Admin": {
+      "title": "Admin",
+      "description": "Authorized administrator account reference.",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "email": { "type": "string", "format": "email", "maxLength": 160 },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "email", "createdAt"]
+    },
+    "Category": {
+      "title": "Category",
+      "description": "Men's clothing product category.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-zA-Z0-9_\\-]+$", "maxLength": 80 },
+        "name": { "type": "string", "minLength": 2, "maxLength": 64 },
+        "slug": { "type": "string", "pattern": "^[a-z0-9\\-]+$", "maxLength": 80 },
+        "description": { "type": "string", "maxLength": 300 },
+        "sortOrder": { "type": "integer" },
+        "active": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "name", "slug", "active", "sortOrder", "createdAt"]
+    },
+    "Product": {
+      "title": "Product",
+      "description": "SAIM CLOTHES catalog garment with PKR pricing, stock, sizes, and colors.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-zA-Z0-9_\\-]+$", "maxLength": 128 },
+        "name": { "type": "string", "minLength": 2, "maxLength": 120 },
+        "description": { "type": "string", "minLength": 10, "maxLength": 2500 },
+        "category": { "type": "string", "minLength": 2, "maxLength": 64 },
+        "originalPrice": { "type": "number" },
+        "discountPrice": { "type": "number" },
+        "sizes": { "type": "array", "description": "Available sizes e.g. S, M, L, XL, XXL" },
+        "colors": { "type": "array", "description": "Available color objects {name, hex}" },
+        "images": { "type": "array", "description": "Product image URLs or compressed data URLs" },
+        "stock": { "type": "integer" },
+        "status": { "type": "string", "enum": ["active", "draft", "archived"] },
+        "featured": { "type": "boolean" },
+        "ratingAvg": { "type": "number" },
+        "ratingCount": { "type": "integer" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": [
+        "id",
+        "name",
+        "description",
+        "category",
+        "originalPrice",
+        "discountPrice",
+        "sizes",
+        "colors",
+        "images",
+        "stock",
+        "status",
+        "featured",
+        "ratingAvg",
+        "ratingCount",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "Review": {
+      "title": "Review",
+      "description": "Verified customer rating and review for a product.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-zA-Z0-9_\\-]+$", "maxLength": 128 },
+        "productId": { "type": "string", "pattern": "^[a-zA-Z0-9_\\-]+$", "maxLength": 128 },
+        "userId": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "userName": { "type": "string", "minLength": 1, "maxLength": 80 },
+        "rating": { "type": "integer" },
+        "comment": { "type": "string", "minLength": 3, "maxLength": 800 },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "productId", "userId", "userName", "rating", "comment", "createdAt"]
+    },
+    "Coupon": {
+      "title": "Coupon",
+      "description": "Discount coupon code in PKR or percentage.",
+      "type": "object",
+      "properties": {
+        "code": { "type": "string", "pattern": "^[A-Z0-9_\\-]+$", "minLength": 3, "maxLength": 32 },
+        "type": { "type": "string", "enum": ["percent", "fixed"] },
+        "value": { "type": "number" },
+        "minOrder": { "type": "number" },
+        "active": { "type": "boolean" },
+        "description": { "type": "string", "maxLength": 160 },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["code", "type", "value", "minOrder", "active", "createdAt"]
+    },
+    "Order": {
+      "title": "Order",
+      "description": "Customer or guest clothing order in PKR.",
+      "type": "object",
+      "properties": {
+        "orderId": { "type": "string", "pattern": "^[a-zA-Z0-9_\\-]+$", "maxLength": 64 },
+        "userId": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "isGuest": { "type": "boolean" },
+        "customerName": { "type": "string", "minLength": 2, "maxLength": 100 },
+        "customerEmail": { "type": "string", "maxLength": 160 },
+        "customerPhone": { "type": "string", "minLength": 7, "maxLength": 30 },
+        "shippingAddress": { "type": "string", "minLength": 5, "maxLength": 300 },
+        "city": { "type": "string", "minLength": 2, "maxLength": 80 },
+        "postalCode": { "type": "string", "maxLength": 20 },
+        "items": { "type": "array" },
+        "subtotal": { "type": "number" },
+        "discountCode": { "type": "string", "maxLength": 32 },
+        "discountAmount": { "type": "number" },
+        "shippingFee": { "type": "number" },
+        "total": { "type": "number" },
+        "paymentMethod": { "type": "string", "enum": ["Cash on Delivery", "Bank Transfer", "Easypaisa", "JazzCash"] },
+        "paymentReference": { "type": "string", "maxLength": 100 },
+        "paymentStatus": { "type": "string", "enum": ["Cash on Delivery", "Awaiting Verification", "Verified", "Failed"] },
+        "status": { "type": "string", "enum": ["Pending", "Confirmed", "Processing", "Shipped", "Delivered", "Cancelled"] },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": [
+        "orderId",
+        "userId",
+        "isGuest",
+        "customerName",
+        "customerPhone",
+        "shippingAddress",
+        "city",
+        "items",
+        "subtotal",
+        "discountAmount",
+        "shippingFee",
+        "total",
+        "paymentMethod",
+        "paymentStatus",
+        "status",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "UserPrivateInfo": {
+      "title": "UserPrivateInfo",
+      "description": "Isolated PII and wishlist preferences for an authenticated user.",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "displayName": { "type": "string", "maxLength": 100 },
+        "email": { "type": "string", "maxLength": 160 },
+        "phone": { "type": "string", "maxLength": 30 },
+        "address": { "type": "string", "maxLength": 300 },
+        "city": { "type": "string", "maxLength": 80 },
+        "postalCode": { "type": "string", "maxLength": 20 },
+        "wishlist": { "type": "array" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "email", "wishlist", "createdAt", "updatedAt"]
+    },
+    "CustomerRecord": {
+      "title": "CustomerRecord",
+      "description": "Customer directory summary for admin CRM.",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "name": { "type": "string", "minLength": 1, "maxLength": 100 },
+        "email": { "type": "string", "maxLength": 160 },
+        "phone": { "type": "string", "maxLength": 30 },
+        "city": { "type": "string", "maxLength": 80 },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "name", "email", "createdAt", "updatedAt"]
+    },
+    "Inquiry": {
+      "title": "Inquiry",
+      "description": "Customer contact form inquiry.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-zA-Z0-9_\\-]+$", "maxLength": 128 },
+        "name": { "type": "string", "minLength": 2, "maxLength": 100 },
+        "email": { "type": "string", "minLength": 3, "maxLength": 160 },
+        "phone": { "type": "string", "maxLength": 30 },
+        "subject": { "type": "string", "minLength": 2, "maxLength": 120 },
+        "message": { "type": "string", "minLength": 5, "maxLength": 2000 },
+        "status": { "type": "string", "enum": ["new", "resolved"] },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "name", "email", "subject", "message", "status", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/admins/{uid}": {
+      "schema": { "$ref": "#/entities/Admin" },
+      "description": "Trusted admin UID registry."
+    },
+    "/categories/{categoryId}": {
+      "schema": { "$ref": "#/entities/Category" },
+      "description": "Men's clothing categories."
+    },
+    "/products/{productId}": {
+      "schema": { "$ref": "#/entities/Product" },
+      "description": "All store garments and pricing."
+    },
+    "/products/{productId}/reviews/{reviewId}": {
+      "schema": { "$ref": "#/entities/Review" },
+      "description": "Customer reviews for a product."
+    },
+    "/coupons/{couponId}": {
+      "schema": { "$ref": "#/entities/Coupon" },
+      "description": "Storewide discount coupon codes."
+    },
+    "/orders/{orderId}": {
+      "schema": { "$ref": "#/entities/Order" },
+      "description": "Customer and guest orders."
+    },
+    "/users/{userId}/private/{docId}": {
+      "schema": { "$ref": "#/entities/UserPrivateInfo" },
+      "description": "Private PII and wishlist for a registered customer."
+    },
+    "/customers/{customerId}": {
+      "schema": { "$ref": "#/entities/CustomerRecord" },
+      "description": "Customer CRM directory entries."
+    },
+    "/inquiries/{inquiryId}": {
+      "schema": { "$ref": "#/entities/Inquiry" },
+      "description": "Contact Us submissions."
+    }
+  }
+}
